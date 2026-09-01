@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { sanitizeAndGuard } from '@/lib/guardrails';
-import { computeTelemetry } from '@/lib/telemetry';
+import { sanitizeAndGuard } from '../../../lib/guardrails';
+import { computeTelemetry } from '../../../lib/telemetry';
 
 export async function POST(req: Request) {
   const startTime = Date.now();
@@ -8,7 +8,7 @@ export async function POST(req: Request) {
   try {
     const { query, profile, sampleRows } = await req.json();
 
-    // 1. Enforce Guardrails (Prompt Injection & Payload Shields)
+    // 1. Guardrails
     const guardCheck = sanitizeAndGuard(query);
     if (!guardCheck.allowed) {
       const latency = Date.now() - startTime;
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
 
     const cleanQuery = guardCheck.cleanText.toLowerCase();
 
-    // 2. Autonomous Statistical Query Interpreter
+    // 2. Statistical Interpretation
     let answer = "";
     const numericCols = profile?.columns?.filter((c: any) => c.type === 'numeric') || [];
     const catCols = profile?.columns?.filter((c: any) => c.type === 'categorical') || [];
@@ -51,7 +51,6 @@ export async function POST(req: Request) {
       answer = `📋 Dataset Profile Analysis:\n• Total Records: ${profile?.rowCount || 0}\n• Total Columns: ${profile?.columnCount || 0}\n• Numeric Columns: ${numericCols.map((c: any) => c.name).join(', ') || 'None'}\n• Categorical Columns: ${catCols.map((c: any) => c.name).join(', ') || 'None'}`;
     }
 
-    // 3. Compute Real-time Telemetry & Cost
     const latency = Date.now() - startTime;
     const telemetry = computeTelemetry(query, answer, latency);
 

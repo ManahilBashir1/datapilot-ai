@@ -2,14 +2,14 @@
 
 import React, { useState } from 'react';
 import Papa from 'papaparse';
-import { UploadCloud, BarChart3, Database, FileSpreadsheet, Sparkles, RefreshCw } from 'lucide-react';
-import { analyzeDataset, DatasetProfile } from '@/lib/data_analyzer';
-import { ChartRenderer } from '@/components/ChartRenderer';
-import { DataPreviewTable } from '@/components/DataPreviewTable';
-import { MetricsCards } from '@/components/MetricsCards';
-import { AgentChat } from '@/components/AgentChat';
+import { UploadCloud, BarChart3, Database, FileSpreadsheet, Sparkles } from 'lucide-react';
+import { analyzeDataset, DatasetProfile } from '../lib/data_analyzer';
+import { ChartRenderer } from '../components/ChartRenderer';
+import { DataPreviewTable } from '../components/DataPreviewTable';
+import { MetricsCards } from '../components/MetricsCards';
+import { AgentChat } from '../components/AgentChat';
 
-// Sample pre-loaded demo dataset
+// Pre-loaded demo dataset
 const SAMPLE_DEMO_CSV = `Region,Product,Units_Sold,Revenue,Customer_Satisfaction
 North America,Enterprise Cloud,450,135000,4.8
 Europe,Security Suite,320,96000,4.6
@@ -101,11 +101,10 @@ export default function Dashboard() {
       <div className="max-w-7xl mx-auto mt-8">
         {profile ? (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            {/* Left Column: Metrics, Charts, & Data Table (7 Cols) */}
+            {/* Left Column (7 Cols) */}
             <div className="lg:col-span-7 space-y-6">
               <MetricsCards profile={profile} />
 
-              {/* View Switcher Tabs */}
               <div className="flex gap-2 border-b border-slate-800 pb-2">
                 <button
                   onClick={() => setActiveTab('visualizations')}
@@ -149,7 +148,6 @@ export default function Dashboard() {
             </div>
           </div>
         ) : (
-          /* Empty State Dropzone */
           <div className="border-2 border-dashed border-slate-800 rounded-3xl p-16 text-center flex flex-col items-center justify-center bg-slate-900/30 backdrop-blur max-w-2xl mx-auto my-12">
             <div className="p-4 bg-indigo-600/10 rounded-2xl border border-indigo-500/20 text-indigo-400 mb-4">
               <FileSpreadsheet className="w-10 h-10" />
